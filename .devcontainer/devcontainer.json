@@ -1,0 +1,48 @@
+{
+    "name": "NVHPC 22.11",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "main",
+    "remoteUser": "dev",
+    "workspaceFolder": "/home/dev/workspace/chemqulacs-gpu",
+    "initializeCommand": "${localWorkspaceFolder}/.devcontainer/init.sh",
+    "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/postCreateCommand.sh",
+    "shutdownAction": "stopCompose",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": "always"
+                    }
+                },
+                "ruff.configuration": "${containerWorkspaceFolder}/pyproject.toml",
+                "mypy-type-checker.importStrategy": "fromEnvironment",
+                "mypy-type-checker.args": [
+                    "--config-file=${containerWorkspaceFolder}/setup.cfg"
+                ],
+                "C_Cpp.clang_format_style": "{BasedOnStyle: Google, IndentWidth: 4, IncludeBlocks: Preserve}",
+                "files.watcherExclude": {
+                    "**/.git/objects/**": true,
+                    "**/.git/subtree-cache/**": true,
+                    "**/node_modules/*/**": true,
+                    "**/.venv/**": true
+                }
+            },
+            "extensions": [
+                "EditorConfig.EditorConfig",
+                "mhutchie.git-graph",
+                "ms-python.python",
+                "charliermarsh.ruff",
+                "njpwerner.autodocstring",
+                "ms-vscode.cpptools-extension-pack",
+                "ms-python.mypy-type-checker",
+                "xaver.clang-format",
+                "github.vscode-github-actions",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    }
+}

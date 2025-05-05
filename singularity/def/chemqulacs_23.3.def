@@ -1,0 +1,155 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/nvhpc:23.3-devel-cuda12.0-ubuntu22.04
+
+%files
+	../chemqulacs /opt/chemqulacs-gpu/chemqulacs
+	../poetry.lock /opt/chemqulacs-gpu/poetry.lock
+	../poetry.toml /opt/chemqulacs-gpu/poetry.toml
+	../pyproject.toml /opt/chemqulacs-gpu/pyproject.toml
+	../setup.py /opt/chemqulacs-gpu/setup.py
+	../setup.cfg /opt/chemqulacs-gpu/setup.cfg
+	./mpiQulacs /opt/mpiQulacs
+
+%environment
+	export TZ=Asia/Tokyo
+
+	# NVHPC
+	. /etc/profile.d/lmod.sh
+	module load nvhpc-hpcx hpcx-ompi
+	. /opt/nvidia/hpc_sdk/Linux_x86_64/23.3/comm_libs/hpcx/hpcx-2.14/hpcx-init.sh
+	hpcx_load
+
+	# module load nvhpc
+	# export MPI_HOME=/opt/nvidia/hpc_sdk/Linux_x86_64/23.3/comm_libs/openmpi4/openmpi-4.0.5
+	# export PATH=$MPI_HOME/bin:$PATH
+	# export LD_LIBRARY_PATH=$MPI_HOME/lib:$LD_LIBRARY_PATH
+
+	# export LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+	export LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.3/math_libs/lib64:$LIBRARY_PATH
+
+	# Standard compiler
+	export CC=gcc
+	export CXX=g++  
+	export FC=gfortran
+	export F77=gfortran
+	export F90=gfortran
+	export CUDA_HOME=/opt/nvidia/hpc_sdk/Linux_x86_64/23.3/cuda
+
+	# OpenMPI
+	export OMPI_CC=$CC
+	export OMPI_CXX=$CXX
+	export OMPI_FC=$FC
+
+	# python
+	export PYENV_ROOT=/opt/pyenv
+	export PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}
+	export PATH=/opt/poetry/bin:$PATH
+
+	# cuQuantum & cuTensor
+	export CUQUANTUM_ROOT=/opt/cuquantum
+	export CUTENSOR_ROOT=/opt/cutensor
+	export LD_LIBRARY_PATH=${CUQUANTUM_ROOT}/lib:${CUTENSOR_ROOT}/lib/12:${LD_LIBRARY_PATH}
+
+	# chemqulacs-gpu
+	export LD_LIBRARY_PATH=/opt/chemqulacs-gpu/chemqulacs/cpp:$LD_LIBRARY_PATH
+	export PYTHONPATH=/opt/chemqulacs-gpu/chemqulacs/cpp:$PYTHONPATH
+
+%post
+	# Initial settings
+	. /etc/profile.d/lmod.sh
+	module load nvhpc-hpcx
+	export HPCX_HOME=/opt/nvidia/hpc_sdk/Linux_x86_64/23.3/comm_libs/hpcx/hpcx-2.14
+	sed -i "2c mydir=$HPCX_HOME" $HPCX_HOME/hpcx-init.sh
+
+	# . /etc/profile.d/lmod.sh
+	# module load nvhpc
+	# export MPI_HOME=/opt/nvidia/hpc_sdk/Linux_x86_64/23.3/comm_libs/openmpi4/openmpi-4.0.5
+	# export PATH=$MPI_HOME/bin:$PATH
+	# export LD_LIBRARY_PATH=$MPI_HOME/lib:$LD_LIBRARY_PATH
+	# export LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+	# cd /opt/nvidia/hpc_sdk/Linux_x86_64/23.3/compilers/lib/ && mv libgomp.so.1 libgomp.so.1.bk
+
+	export CC=gcc
+	export CXX=g++  
+	export FC=gfortran
+	export F77=gfortran
+	export F90=gfortran
+	export CUDA_HOME=/opt/nvidia/hpc_sdk/Linux_x86_64/23.3/cuda
+	export OMPI_CC=$CC
+	export OMPI_CXX=$CXX
+	export OMPI_FC=$FC
+	
+	# Install packages
+	export DEBIAN_FRONTEND=noninteractive
+	export DEBCONF_NOWARNINGS=yes
+	apt-get update
+	apt-get install -y --no-install-recommends \
+	ca-certificates \
+	less \
+	curl \
+	openssl \
+	libssl-dev \
+	libbz2-dev \
+	libreadline-dev \
+	libsqlite3-dev \
+	libffi-dev \
+	zlib1g-dev \
+	liblzma-dev \
+    libboost-dev \
+	python3-dev
+
+	# Install pyenv
+	export PYTHON_VERSION=3.10.13
+	export PYENV_ROOT=/opt/pyenv
+	export PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}
+	git clone https://github.com/pyenv/pyenv.git ${PYENV_ROOT}
+	pyenv install -v ${PYTHON_VERSION}
+	pyenv global ${PYTHON_VERSION}
+	pyenv rehash
+	export C_INCLUDE_PATH=$PYENV_ROOT/versions/$PYTHON_VERSION/include/python3.11/cpython
+
+	# Install poetry
+	curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python -
+	export PATH=/opt/poetry/bin:$PATH
+
+	# Install cuQuantum & cuTensor
+	export INSTALL_DIR=/opt
+	export CUQUANTUM_ROOT=${INSTALL_DIR}/cuquantum
+	export CUTENSOR_ROOT=${INSTALL_DIR}/cutensor
+	export CUQUANTUM_FILENAME=cuquantum-linux-x86_64-23.06.1.8_cuda12-archive
+	export CUTENSOR_FILENAME=libcutensor-linux-x86_64-1.7.0.1-archive
+	cd /opt
+	wget -nv https://developer.download.nvidia.com/compute/cuquantum/redist/cuquantum/linux-x86_64/${CUQUANTUM_FILENAME}.tar.xz
+	wget -nv https://developer.download.nvidia.com/compute/cutensor/redist/libcutensor/linux-x86_64/${CUTENSOR_FILENAME}.tar.xz
+	tar --no-same-permissions --no-same-owner -xf ${CUQUANTUM_FILENAME}.tar.xz
+	tar --no-same-permissions --no-same-owner -xf ${CUTENSOR_FILENAME}.tar.xz
+	mv ${CUQUANTUM_FILENAME} cuquantum
+	mv ${CUTENSOR_FILENAME} cutensor
+	rm ${CUQUANTUM_FILENAME}.tar.xz
+	rm ${CUTENSOR_FILENAME}.tar.xz
+	export LD_LIBRARY_PATH=${CUQUANTUM_ROOT}/lib:${CUTENSOR_ROOT}/lib/12:${LD_LIBRARY_PATH}
+
+	# Install pip package
+	cd /opt/chemqulacs-gpu
+	poetry config virtualenvs.create false
+	poetry install
+
+	# Install mpiQulacs
+	cd /opt
+	git clone https://github.com/qulacs/qulacs.git
+	cd /opt/qulacs
+	git checkout parametricgate
+	cd src/gpusim
+	cp /opt/mpiQulacs/CMakeLists.txt /opt/qulacs/src/gpusim/CMakeLists.txt
+	cd ../../
+	C_COMPILER=mpicc CXX_COMPILER=mpic++ USE_MPI=Yes USE_GPU=Yes pip install .
+
+	# Install quket
+	cd /opt
+	git clone https://github.com/quket/quket
+	cd /opt/quket
+	pip install .
+
+%runscript
+	cd /opt/chemqulacs-gpu
+	pip install .
