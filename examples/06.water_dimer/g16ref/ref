@@ -1,0 +1,312 @@
+****************************************************
+*                                                  *
+*                  GENESIS ATDYN                   *
+*                                                  *
+*        A Molecular Dynamics Simulator with       *
+*            Atomic Decomposition Scheme           *
+*                                                  *
+*               Developed by RIKEN                 *
+*                                                  *
+****************************************************
+ 
+[STEP0] Architecture and Compiler Information
+ 
+GENESIS_Information> GENESIS Information
+  version      = 1.3.0
+  commit ID    = $GENESIS_VERSION$
+  precision    = double
+  nonbonding   = CPU
+
+Build_Information> Compiler Information
+  build host   = yagi@beluga
+  fortran      = ifort (IFORT) 18.0.1 20171018
+  option       = -xHost -O3 -ip -mkl=parallel  -assume byterecl -qopenmp 
+  C            = icc (ICC) 18.0.1 20171018
+  option       = -O3 -ip -axCORE-AVX2  -qopenmp
+  defined var. =  -DMPI -DOMP -DFFTE -DLAPACK -DDSFMT_MEXP=19937 -DINTEL
+  link option  = 
+  -assume byterecl -qopenmp  -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lmkl_
+ lapack95_lp64 
+
+Runtime_Information> Machine and Library Information
+  date       = 2019/11/10 22:49:16
+  cpu model    = Intel(R) Xeon(R) CPU E5-2667 v3 @ 3.20GHz
+  exec. host   = yagi@beluga04
+  LD library   = 
+ /home/mdsoft/mpi/mpi_cent-v7_intel64/openmpi-v3.1.2_intel_v18.0.1/lib:/opt/inte
+ l/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin:/opt/intel/
+ compilers_and_libraries_2018.1.163/linux/mkl/lib/intel64_lin:/opt/intel/compile
+ rs_and_libraries_2018.1.163/linux/compiler/lib/intel64:/opt/intel/compilers_and
+ _libraries_2018.1.163/linux/compiler/lib/intel64_lin:/opt/intel/compilers_and_l
+ ibraries_2018.1.163/linux/mpi/intel64/lib:/opt/intel/compilers_and_libraries_20
+ 18.1.163/linux/mpi/mic/lib:/opt/intel/compilers_and_libraries_2018.1.163/linux/
+ ipp/lib/intel64:/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/li
+ b/intel64_lin:/opt/intel/compilers_and_libraries_2018.1.163/linux/mkl/lib/intel
+ 64_lin:/opt/intel/compilers_and_libraries_2018.1.163/linux/tbb/lib/intel64/gcc4
+ .7:/opt/intel/compilers_and_libraries_2018.1.163/linux/tbb/lib/intel64/gcc4.7:/
+ opt/intel/compilers_and_libraries_2018.1.163/linux/daal/lib/intel64_lin:/home/y
+ agi/pgm/terachem1.93P/TeraChem/lib:/home/yagi/pgm/amber16_beluga/lib:/home/mdso
+ ft/mpi/mpi_cent-v7_intel64/openmpi-v4.0.0_intel_v18.0.1/lib:/opt/intel/compiler
+ s_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin:/opt/intel/compilers_
+ and_libraries_2018.1.163/linux/mkl/lib/intel64_lin:/opt/intel/compilers_and_lib
+ raries_2018.1.163/linux/compiler/lib/intel64:/opt/intel/compilers_and_libraries
+ _2018.1.163/linux/compiler/lib/intel64_lin:/opt/intel/compilers_and_libraries_2
+ 018.1.163/linux/mpi/intel64/lib:/opt/intel/compilers_and_libraries_2018.1.163/
+
+[STEP1] Read Control Parameters
+ 
+Read_Ctrl_Input> Input Files
+  topfile = ../../toppar/top_all36_prot_lipid.rtf
+  parfile = ../../toppar/par_all36_prot_lipid.prm
+  psffile = ../w3.psf
+  crdfile = ../w3.crd
+ 
+Read_Ctrl_Output> Output Files
+ 
+Read_Ctrl_Energy> Parameters of Energy Calculations
+  forcefield      =     CHARMM
+  switchdist      =     99.000  cutoffdist      =     99.500
+  pairlistdist    =    100.000  dielec_const    =      1.000
+ vdW force_switch =         no
+  electrostatic   =  CUTOFF
+  implicit_solvent=       none
+  table_order     =          3
+  table_density   =     20.000
+  water_model     =       NONE
+  output_style    =    GENESIS
+  dispersion_corr =       none
+  nonb_limiter    =      no
+ 
+Read_Ctrl_Minimize> Parameters of MIN
+  method                     =      SD     nsteps                     =          1
+  eneout_period              =          1  crdout_period              =          0
+  rstout_period              =          0  nbupdate_period            =          1
+  fixatm_select_index        =       none
+  tol_rmsg                   =   0.36E+00  tol_maxg                   =   0.54E+00
+  verbose                    =         no
+  force_scale_init           =      0.010  force_scale_max            =      0.100
+  macro                      =         no
+ 
+Read_Ctrl_Boundary> Parameters of Boundary Condition
+  type            =       NOBC
+  spherical_pot   =         no  restart         =          T
+ 
+Read_Ctrl_Selection> Parameters of Selection
+  # of groups     =          1
+    group 1 = resno:2
+  # of mole names =          0
+ 
+Read_Ctrl_Restraints> No restraint in the system
+
+Read_Ctrl_Fitting_MD> Parameters of Fitting
+  fitting method  =  TR+ROT   
+  fitting atom    = group1
+  mass_weight     =         no
+ 
+Read_Ctrl_QMMM> Parameters of QM/MM
+  qmtyp              = gaussian
+  qmcnt              = gaussian.com
+  qmexe              = runGau.sh
+  workdir            = qmmm
+  savedir            = none
+  basename           = job
+  qmsave_period      = 1
+  qmmaxtrial         = 3
+  qmatm_select_index = 1
+  exclude_charge     = GROUP
+ 
+[STEP2] Setup MPI
+ 
+Setup_Mpi_Md> Summary of Setup MPI
+  number of MPI processes   =          1
+  number of OpenMP threads  =          1
+  total number of CPU cores =          1
+
+[STEP3] Set Relevant Variables and Structures
+ 
+Input_Top> Summary of Topfile
+  num_atom_class  =        122  num_resi_type   =         97
+ 
+Input_Par> Summary of Parfile
+  num_bonds       =        190  num_angles      =        487
+  num_dihedrals   =        635  num_impropers   =         47
+  num_atom_cls    =        122  num_nbfix       =          0
+  num_cmap_terms  =          6
+ 
+Read_Psf> Summary of Psffile
+  psftype         =      xplor
+  num_atoms       =          9  num_bonds       =          9
+  num_angles      =          3  num_dihedrals   =          0
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_HB_donors   =          0  num_HB_acceptors=          3
+  num_NB_exclusion=          0  num_groups      =          3
+  total_charge    =      0.000
+ 
+Read_Crd> Summary of CRD file
+  num_atoms       =          9
+ 
+Define_Molecule> Summary of molecules
+  num_atoms       =          9  num_bonds       =          9
+  num_angles      =          3  num_dihedrals   =          0
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_residues    =          3  num_molecules   =          3
+  num_segments    =          1  num_deg_freedom =         27
+  total_charge    =      0.000
+ 
+Setup_Boundary> Setup Variables for Boundary Condition
+  origin(x,y,z)   =      0.000     0.000     0.000
+ 
+ 
+Setup_QMMM> Setup QM region
+ 
+  Check the control file for Gaussian [ gaussian.com ]
+  Passed the check!
+  QM assignment info
+     4 WATE      2 TIP3   OH2  OT     assigned to QM atom    1 of element: O     8
+     5 WATE      2 TIP3   H1   HT     assigned to QM atom    2 of element: H     1
+     6 WATE      2 TIP3   H2   HT     assigned to QM atom    3 of element: H     1
+  number of QM atoms = 3
+ 
+Setup_Enefunc_Cmap_Par> Natural spline is used to derive cmap coefs.
+
+Setup_Enefunc_Table> Setup Variables for LookupTable
+  num_solutes     =          9  num_waters      =          0
+
+Define_Enefunc_CHARMM> Number of Interactions in Each Term
+  bond_ene        =          6  angle_ene       =          2
+  urey_ene        =          0
+  torsion_ene     =          0  improper_ene    =          0
+  cmap_ene        =          0
+  restraint_groups=          0  restraint_funcs =          0
+ 
+Setup_Fitting_Atdyn> NO fitting is applied, skip
+  fitting method  =  NO
+ 
+Setup_MinAtoms> Atoms info in minimize
+  number of fixed atoms     = 0
+     1 WATE      1 TIP3   OH2  OT    
+     2 WATE      1 TIP3   H1   HT    
+     3 WATE      1 TIP3   H2   HT    
+     4 WATE      2 TIP3   OH2  OT    
+     5 WATE      2 TIP3   H1   HT    
+     6 WATE      2 TIP3   H2   HT    
+     7 WATE      3 TIP3   OH2  OT    
+     8 WATE      3 TIP3   H1   HT    
+     9 WATE      3 TIP3   H2   HT    
+  number of minimized atoms = 9
+ 
+[STEP4] Compute Single Point Energy for Molecules
+ 
+QMMM_debug> launching QM program gaussian
+QMMM_debug>  QM command : cd qmmm.0; /home/yagi/devel/genesis/tests_qmmm/test_ene/1.water_trimer/g09/runGau.sh job0.inp job0.log 0
+QMMM_debug>  QMexe      : /home/yagi/devel/genesis/tests_qmmm/test_ene/1.water_trimer/g09/runGau.sh
+QMMM_debug>  QMfolder   : qmmm.0
+QMMM_debug>  QMinp      : job0.inp
+QMMM_debug>  QMout      : job0.log
+QMMM_debug>  SaveFile   :  T
+QMMM_debug> QM energy =     -76.6658022367, MM electrostatic energy =      -0.6800496290
+QMMM_debug> QM dipole =      -0.1822     -0.9022     -0.1627
+QMMM_debug> exec mv qmmm.0/gaussian.Fchk qmmm.0/job0.Fchk
+QMMM_debug> QMMM force
+QMMM_debug>        1          241.760051           65.217737          -31.529614 -0.8340
+QMMM_debug>        2          -96.953398          -21.223013          106.395232  0.4170
+QMMM_debug>        3         -125.358873          -23.355911          -74.436550  0.4170
+QMMM_debug>        4          -49.107096         -138.018558           29.985970  0.0000
+QMMM_debug>        5           47.441158           85.151129         -129.302091  0.0000
+QMMM_debug>        6           -6.129717           45.071621          104.953911  0.0000
+QMMM_debug>        7         -126.276553         -124.211629          -80.285694 -0.8340
+QMMM_debug>        8           78.750194          113.403532           20.474182  0.4170
+QMMM_debug>        9           35.873940           -2.035878           53.745243  0.4170
+            STEP            BOND           ANGLE    UREY-BRADLEY         VDWAALS           ELECT              QM
+ --------------- --------------- --------------- --------------- ---------------
+               0         31.1546          0.4456          0.0000          9.8684         -6.8095     -47681.7816
+
+QMMM_debug> QMMM force
+QMMM_debug>        1          242.941876           64.873656          -30.697809 -0.8340
+QMMM_debug>        2          -99.168124          -20.833986          104.866060  0.4170
+QMMM_debug>        3         -125.337393          -23.140990          -74.668427  0.4170
+QMMM_debug>        4          -11.061695            5.565631           22.411821 -0.7738
+QMMM_debug>        5           -0.761624           -1.931274           -1.363296  0.3497
+QMMM_debug>        6            3.966497          -10.653063          -13.179436  0.4240
+QMMM_debug>        7         -123.878256         -125.457789          -82.424010 -0.8340
+QMMM_debug>        8           77.522572          113.463369           20.709732  0.4170
+QMMM_debug>        9           35.776148           -1.885554           54.345365  0.4170
+               0         31.1546          0.4456          0.0000          9.8684        -20.2174          0.0000
+
+[STEP5] Perform Energy Minimization
+ 
+QMMM_debug> launching QM program gaussian
+QMMM_debug>  QM command : cd qmmm.0; /home/yagi/devel/genesis/tests_qmmm/test_ene/1.water_trimer/g09/runGau.sh job0.inp job0.log 0
+QMMM_debug>  QMexe      : /home/yagi/devel/genesis/tests_qmmm/test_ene/1.water_trimer/g09/runGau.sh
+QMMM_debug>  QMfolder   : qmmm.0
+QMMM_debug>  QMinp      : job0.inp
+QMMM_debug>  QMout      : job0.log
+QMMM_debug>  SaveFile   :  T
+QMMM_debug> QM energy =     -76.6658022367, MM electrostatic energy =      -0.6800496290
+QMMM_debug> QM dipole =      -0.1822     -0.9022     -0.1627
+QMMM_debug> exec mv qmmm.0/gaussian.Fchk qmmm.0/job0.Fchk
+QMMM_debug> QMMM force
+QMMM_debug>        1          241.760051           65.217737          -31.529614 -0.8340
+QMMM_debug>        2          -96.953398          -21.223013          106.395232  0.4170
+QMMM_debug>        3         -125.358873          -23.355911          -74.436550  0.4170
+QMMM_debug>        4          -49.107097         -138.018558           29.985970  0.0000
+QMMM_debug>        5           47.441159           85.151128         -129.302090  0.0000
+QMMM_debug>        6           -6.129717           45.071622          104.953910  0.0000
+QMMM_debug>        7         -126.276553         -124.211629          -80.285694 -0.8340
+QMMM_debug>        8           78.750194          113.403532           20.474182  0.4170
+QMMM_debug>        9           35.873940           -2.035878           53.745243  0.4170
+INFO:       STEP   POTENTIAL_ENE            RMSG            MAXG            BOND           ANGLE    UREY-BRADLEY         VDWAALS           ELECT              QM
+ --------------- --------------- --------------- --------------- ---------------
+INFO:          0     -47647.1225         92.2581        241.7601         31.1546          0.4456          0.0000          9.8684         -6.8095     -47681.7816
+
+QMMM_debug> launching QM program gaussian
+QMMM_debug>  QM command : cd qmmm.0; /home/yagi/devel/genesis/tests_qmmm/test_ene/1.water_trimer/g09/runGau.sh job1.inp job1.log 1
+QMMM_debug>  QMexe      : /home/yagi/devel/genesis/tests_qmmm/test_ene/1.water_trimer/g09/runGau.sh
+QMMM_debug>  QMfolder   : qmmm.0
+QMMM_debug>  QMinp      : job1.inp
+QMMM_debug>  QMout      : job1.log
+QMMM_debug>  SaveFile   :  T
+QMMM_debug> QM energy =     -76.6672681586, MM electrostatic energy =      -0.6707863751
+QMMM_debug> QM dipole =      -0.1817     -0.8916     -0.1526
+QMMM_debug> exec mv qmmm.0/gaussian.Fchk qmmm.0/job1.Fchk
+QMMM_debug> QMMM force
+QMMM_debug>        1          186.119309           48.655858          -22.259618 -0.8340
+QMMM_debug>        2          -76.633512          -16.636029           81.416951  0.4170
+QMMM_debug>        3          -95.686048          -17.347233          -58.446495  0.4170
+QMMM_debug>        4          -42.688344         -124.597036           29.815093  0.0000
+QMMM_debug>        5           45.576940           79.946604         -126.566733  0.0000
+QMMM_debug>        6           -7.589776           38.079437           99.620771  0.0000
+QMMM_debug>        7          -97.915180          -93.937459          -58.284902 -0.8340
+QMMM_debug>        8           61.196294           87.070569           14.854160  0.4170
+QMMM_debug>        9           27.620906           -1.234842           39.851857  0.4170
+INFO:          1     -47669.6951         75.2817        186.1193         17.5587          0.3002          0.0000          8.1596         -7.1993     -47688.5143
+
+ 
+[STEP6] Deallocate Arrays
+ 
+Output_Time> Averaged timer profile (Min, Max)
+  total time      =      85.842
+    setup         =      45.613
+    dynamics      =      40.229
+      energy      =      85.215
+      integrator  =       0.000
+      pairlist    =       0.000 (       0.000,       0.000)
+  energy           
+    bond          =       0.000 (       0.000,       0.000)
+    angle         =       0.001 (       0.001,       0.001)
+    dihedral      =       0.000 (       0.000,       0.000)
+    nonbond       =       0.000 (       0.000,       0.000)
+      pme real    =       0.000 (       0.000,       0.000)
+      pme recip   =       0.000 (       0.000,       0.000)
+    solvation     =       0.000 (       0.000,       0.000)
+      polar       =       0.000 (       0.000,       0.000)
+      non-polar   =       0.000 (       0.000,       0.000)
+    restraint     =       0.000 (       0.000,       0.000)
+    qmmm          =      85.214 (      85.214,      85.214)
+  integrator       
+    constraint    =       0.000 (       0.000,       0.000)
+    update        =       0.000 (       0.000,       0.000)
+    comm_coord    =       0.000 (       0.000,       0.000)
+    comm_force    =       0.000 (       0.000,       0.000)
+    comm_migrate  =       0.000 (       0.000,       0.000)
+

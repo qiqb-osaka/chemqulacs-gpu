@@ -1,0 +1,17 @@
+services:
+  main:
+    container_name: chemqulacs-gpu
+    build:
+      context: .
+      args:
+        USERNAME: "dev"
+        UID: $UID
+        GID: $GID
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    tty: true
+    volumes:
+      - ..:/home/dev/workspace/chemqulacs-gpu

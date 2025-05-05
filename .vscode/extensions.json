@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "EditorConfig.EditorConfig",
+		"mhutchie.git-graph",
+		"ms-python.python",
+        "charliermarsh.ruff",
+		"njpwerner.autodocstring",
+		"ms-vscode-remote.vscode-remote-extensionpack",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-python.mypy-type-checker",
+        "xaver.clang-format"
+    ]
+}

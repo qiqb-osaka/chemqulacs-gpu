@@ -1,0 +1,42 @@
+[INPUT]
+topfile = ../../toppar/top_all36_prot_lipid.rtf # topology file
+parfile = ../../toppar/par_all36_prot_lipid.prm # parameter file
+psffile = ../w3.psf               # protein structure file
+crdfile = ../w3.crd               # CRD file for input coord
+
+[OUTPUT]
+#dcdfile = run.dcd  # DCD trajectory file
+#rstfile = run.rst  # restart file
+
+[ENERGY]
+forcefield      = CHARMM        # [CHARMM]
+electrostatic   = CUTOFF        # [CUTOFF,PME]
+switchdist      = 99.0          # switch distance
+cutoffdist      = 99.5          # cutoff distance
+pairlistdist    = 100.0         # pair-list distance
+water_model     = NONE
+
+[MINIMIZE]
+method          = SD
+nsteps          = 1     # number of steps
+eneout_period   = 1     # energy output period
+crdout_period   = 0     # coordinates output period
+rstout_period   = 0     # restart output period
+nbupdate_period = 1
+
+[BOUNDARY]
+type          = NOBC      # [PBC,NOBC]
+
+[QMMM]
+qmtyp              = gaussian
+qmcnt              = gaussian.inp
+qmexe              = runGau.sh
+qmsave_period      = 1
+basename           = job
+qmmaxtrial         = 3
+qmatm_select_index = 1
+qm_debug           = true
+
+[SELECTION]
+group1 = resno:2
+
