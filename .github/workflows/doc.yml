@@ -3,7 +3,7 @@ name: "Build and Deploy Documentation"
 on:
   pull_request:
     branches:
-      - chemqulacs_gpu
+      - main
     paths-ignore:
       - 'tests/**'
       - '**.md'

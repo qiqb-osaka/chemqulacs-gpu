@@ -5,7 +5,7 @@ TYPE_CHECKER := poetry run mypy
 SPHINX_APIDOC := poetry run sphinx-apidoc
 
 PROJECT_DIR := chemqulacs
-CHECK_DIR := $(PROJECT_DIR) tests develop
+CHECK_DIR := $(PROJECT_DIR) tests
 PORT := 8000
 
 # If this project is not ready to pass mypy, remove `type` below.
