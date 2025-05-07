@@ -58,6 +58,9 @@ mpirun -np 16 -npernode 8 singularity exec --nv --bind .:/opt/chemqulacs-gpu ./s
 This is an example of using two compute nodes with 8 GPUs for a total of 16 GPUs.
 We have confirmed that the system can run on up to 2048 GPUs.
 
+### Api document
+https://qiqb-osaka.github.io/chemqulacs-gpu/
+
 ## Publication
 
 * Yusuke Teranishi, Shoma Hiraoka, Wataru Mizukami, Masao Okita, Fumihiko Ino, Lazy Qubit Reordering for Accelerating Parallel State-Vector-based Quantum Circuit Simulation, [arXiv:2410.04252](https://arxiv.org/abs/2410.04252) (2024)
