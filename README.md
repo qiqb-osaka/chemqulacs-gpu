@@ -63,8 +63,12 @@ https://qiqb-osaka.github.io/chemqulacs-gpu/
 
 ## Publication
 
-* Yusuke Teranishi, Shoma Hiraoka, Wataru Mizukami, Masao Okita, Fumihiko Ino, Lazy Qubit Reordering for Accelerating Parallel State-Vector-based Quantum Circuit Simulation, [arXiv:2410.04252](https://arxiv.org/abs/2410.04252) (2024)
+If you use chemqulacs-gpu in your research, please cite the journal article listed in [CITATION.cff](CITATION.cff).
+
+* Yusuke Teranishi, Shoma Hiraoka, Wataru Mizukami, Masao Okita, Fumihiko Ino, Lazy Qubit Reordering for Accelerating Parallel State-Vector-based Quantum Circuit Simulation, ACM Transactions on Quantum Computing, Vol. 6, No. 4, Article 27, pp. 1-33 (2025), [doi:10.1145/3748261](https://doi.org/10.1145/3748261)
 * Yusuke Teranishi, Shoma Hiraoka, Wataru Mizukami, Hybrid Parallel Quantum Chemistry Simulation for Large-Scale GPU Clusters, [NVIDIA GTC25 P73003](https://www.nvidia.com/en-us/on-demand/session/gtc25-P73003/) (2025)
+* Shoma Hiraoka, Yusuke Teranishi, Sho Nishida, Wataru Mizukami, Efficient Iterative QPE Simulations for Quantum Chemistry Using Distributed State-Vector Methods, [NVIDIA GTC26 P81339](https://www.nvidia.com/en-us/on-demand/session/gtc26-p81339/) (2026)
+* Shoma Hiraoka, Yusuke Teranishi, Sho Nishida, Wataru Mizukami, Large-Scale Distributed State-Vector Simulation of IQPE for Early-FTQC, [SC26 Research Poster](https://sc26.conference-program.com/presentation/?id=rpost279&sess=sess313) (2026)
 
 ## License
 MIT

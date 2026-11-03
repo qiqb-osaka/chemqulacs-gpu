@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use chemqulacs-gpu in your research, please cite the paper in preferred-citation."
+title: chemqulacs-gpu
+authors:
+  - name: chemqulacs-gpu contributors
+repository-code: "https://github.com/qiqb-osaka/chemqulacs-gpu"
+license: MIT
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Teranishi
+      given-names: Yusuke
+    - family-names: Hiraoka
+      given-names: Shoma
+    - family-names: Mizukami
+      given-names: Wataru
+    - family-names: Okita
+      given-names: Masao
+    - family-names: Ino
+      given-names: Fumihiko
+  title: "Lazy Qubit Reordering for Accelerating Parallel State-Vector-based Quantum Circuit Simulation"
+  journal: ACM Transactions on Quantum Computing
+  volume: 6
+  issue: 4
+  year: 2025
+  start: 1
+  end: 33
+  doi: 10.1145/3748261
